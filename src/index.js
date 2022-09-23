@@ -144,9 +144,9 @@ async function onMarkupImages(images) {
   </div>`;
     })
     .join('');
-  imageGalleryListener();
 
   refs.gallery.insertAdjacentHTML('beforeend', markup);
+  imageGalleryListener();
 }
 
 function clearGallery() {
