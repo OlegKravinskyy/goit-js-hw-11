@@ -15,11 +15,10 @@ const refs = {
   gallery: document.querySelector('.gallery'),
 };
 
+refs.loadMoreBtn.disabled = true;
+
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', onClickLoadMore);
-refs.submitBtn.addEventListener('submit', onClickSubmit);
-
-function onClickSubmit() {}
 
 class Images {
   constructor() {
@@ -77,7 +76,7 @@ function onClickLoadMore(e) {
 
   newImages.onGetImages().then(serverImage => {
     if (newImages.totalPage * PAGINATION_PAGES > serverImage.totalHits) {
-      refs.loadMoreBtn.setAttribute('hidden', true);
+      refs.loadMoreBtn.disabled = true;
       Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
@@ -89,13 +88,13 @@ function onClickLoadMore(e) {
 }
 
 async function onMarkupImages(images) {
-  refs.loadMoreBtn.removeAttribute('hidden');
+  refs.loadMoreBtn.disabled = false;
 
   if (!images.length) {
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
-    refs.loadMoreBtn.setAttribute('hidden', true);
+    refs.loadMoreBtn.disabled = true;
     return;
   }
   const markup = images

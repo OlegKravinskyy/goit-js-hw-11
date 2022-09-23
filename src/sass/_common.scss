@@ -97,4 +97,8 @@ a {
   background-color: #aea8a8;
   color: rgb(0, 0, 0);
   cursor: pointer;
+  &:disabled {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
