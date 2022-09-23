@@ -158,7 +158,7 @@ function imageGalleryListener() {
   //   captionDelay: 250,
   //   captionsData: 'alt',
   // });
-  let galleryLarge = new SimpleLightbox('.photo-card a');
+  let galleryLarge = new SimpleLightbox('.gallery a');
 
   refs.gallery.addEventListener('click', evt => {
     evt.preventDefault();
