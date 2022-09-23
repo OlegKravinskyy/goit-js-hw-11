@@ -10,31 +10,22 @@ const PAGINATION_PAGES = 40;
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
-  inputForm: document.querySelector('input'),
   submitBtn: document.querySelector('#submit'),
-  lodeMoreBtn: document.querySelector('.lode-more'),
+  loadMoreBtn: document.querySelector('.load-more'),
   gallery: document.querySelector('.gallery'),
 };
 
-refs.lodeMoreBtn.setAttribute('disabled', 'disabled');
-
 refs.searchForm.addEventListener('submit', onSubmit);
-refs.inputForm.addEventListener('input', onInputForm);
-refs.lodeMoreBtn.addEventListener('click', onClickLoadMore);
+refs.loadMoreBtn.addEventListener('click', onClickLoadMore);
 refs.submitBtn.addEventListener('submit', onClickSubmit);
-
-// let totalPage = 1;
-
-// let searchQuery = '';
 
 function onClickSubmit() {}
 
 class Images {
   constructor() {
     this.searchQuery = '';
-    this.totalPage = 12;
+    this.totalPage = 1;
     this.newQuery = '';
-    this.serverAnswer = '';
   }
 
   async onGetImages() {
@@ -44,9 +35,7 @@ class Images {
       );
 
       const serverImage = await serverAnswer.data;
-      console.log(serverAnswer.data.totalHits);
       this.serverAnswer = serverAnswer;
-      console.log(serverImage);
       return serverImage;
     } catch {
       error => console.log('error');
@@ -74,7 +63,7 @@ const newImages = new Images();
 
 function onSubmit(e) {
   e.preventDefault();
-  // newImages.resetPage();
+  newImages.resetPage();
   newImages.query = e.target.elements.searchQuery.value;
   clearGallery();
   newImages.onGetImages().then(serverImage => {
@@ -88,8 +77,7 @@ function onClickLoadMore(e) {
 
   newImages.onGetImages().then(serverImage => {
     if (newImages.totalPage * PAGINATION_PAGES > serverImage.totalHits) {
-      console.log('Thats all');
-      refs.lodeMoreBtn.setAttribute('disable', 'disable');
+      refs.loadMoreBtn.setAttribute('hidden', true);
       Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
@@ -100,23 +88,14 @@ function onClickLoadMore(e) {
   });
 }
 
-function onInputForm(e) {
-  // e.preventDefault();
-  // newImages.query = e.currentTarget.value;
-  // console.log(newImages.searchQuery);
-  // newImages.onGetImages();
-}
-
-// newImages.onGetImages();
-
 async function onMarkupImages(images) {
-  refs.lodeMoreBtn.removeAttribute('disabled');
+  refs.loadMoreBtn.removeAttribute('hidden');
 
   if (!images.length) {
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
-    refs.lodeMoreBtn.setAttribute('disabled', 'disabled');
+    refs.loadMoreBtn.setAttribute('hidden', true);
     return;
   }
   const markup = images
@@ -124,8 +103,8 @@ async function onMarkupImages(images) {
       return ` 
       
       <div class="photo-card">
-   <a href="${img.largeImageURL}">
-    <img src="${img.webformatURL}" alt="${img.tags}" loading="lazy"  class="gallery__image" />
+   <a class="gallery-link" href="${img.largeImageURL}">
+    <img class="gallery-item" src="${img.webformatURL}" alt="${img.tags}" loading="lazy"  class="gallery__image" />
     </a>
     <div class="info">
       <p class="info-item">
@@ -154,10 +133,6 @@ function clearGallery() {
 }
 
 function imageGalleryListener() {
-  // let lightbox = new SimpleLightbox('.photo-card a', {
-  //   captionDelay: 250,
-  //   captionsData: 'alt',
-  // });
   let galleryLarge = new SimpleLightbox('.gallery a');
 
   refs.gallery.addEventListener('click', evt => {
