@@ -154,17 +154,17 @@ function clearGallery() {
 }
 
 function imageGalleryListener() {
-  let lightbox = new SimpleLightbox('.photo-card a', {
-    captionDelay: 250,
-    captionsData: 'alt',
-  });
-  // let galleryLarge = new SimpleLightbox('.photo-card a');
-
-  // refs.gallery.addEventListener('click', evt => {
-  //   evt.preventDefault();
-  //   galleryLarge.on('show.simplelightbox', () => {
-  //     galleryLarge.defaultOptions.captionDelay = 250;
-  //   });
+  // let lightbox = new SimpleLightbox('.photo-card a', {
+  //   captionDelay: 250,
+  //   captionsData: 'alt',
   // });
-  // // galleryLarge.refresh();
+  let galleryLarge = new SimpleLightbox('.photo-card a');
+
+  refs.gallery.addEventListener('click', evt => {
+    evt.preventDefault();
+    galleryLarge.on('show.simplelightbox', () => {
+      galleryLarge.defaultOptions.captionDelay = 250;
+    });
+  });
+  galleryLarge.refresh();
 }
